@@ -9,5 +9,7 @@ app.use(requestLogger);
 app.use(routes);
 
 app.listen(3001, () => {
-  console.log("🚀 Server listening on: http://127.0.0.1:" + PORT);
+  console.log("-------------------------------------------------");
+  console.log(`< 🚀 Server listening on http://127.0.0.1:${PORT} />`);
+  console.log("-------------------------------------------------");
 });
