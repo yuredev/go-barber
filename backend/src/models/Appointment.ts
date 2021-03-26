@@ -1,23 +1,15 @@
-export default class Appointment {
-  private _id: string;
-  private _provider: string;
-  private _date: Date;
+import { v4 } from "uuid";
 
-  constructor(date: Date, provider: string, id: string) {
-    this._provider = provider;
-    this._date = date;
-    this._id = id;
-  }
+class Appointment {
+  id: string;
+  provider: string;
+  date: Date;
 
-  get date() {
-    return this._date;
-  }
-
-  get provider() {
-    return this._provider;
-  }
-
-  get id() {
-    return this._id;
+  constructor({provider, date}: Omit<Appointment, "id">) {
+    this.provider = provider;
+    this.date = date;
+    this.id = v4();
   }
 }
+
+export default Appointment;
