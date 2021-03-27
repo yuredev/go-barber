@@ -7,16 +7,18 @@ interface RequestDTO {
   date: Date;
 }
 
+// Single Responsability Principle: classe responsável somente por criar agendamentos (Solid)
 class CreateAppointmentService {
   private repository: AppointmentRepository;
-  constructor() {
-    this.repository = new AppointmentRepository();
+  // Dependency Inversion Principle (soliD)
+  constructor(appointmentsRepository: AppointmentRepository) {
+    this.repository = appointmentsRepository;
   }
   public run({ date, provider }: RequestDTO): Appointment {
     const appointmentDate = startOfHour(date);
 
     const thereAreAppointmentsInSameDate =
-      this.repository.findByDate(date) !== null;
+      this.repository.findByDate(appointmentDate) !== null;
 
     if (thereAreAppointmentsInSameDate) {
       throw Error("This appointment is already booked");
