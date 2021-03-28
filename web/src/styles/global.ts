@@ -8,12 +8,12 @@ export default createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     outline: 0;
-    color: #f4ede8;
   }
 
   body {
     background-color: ${backgroundColor};
     --webkit-font-smoothing: antialiased;
+    color: #f4ede8;
   }
 
   body, input, button {
