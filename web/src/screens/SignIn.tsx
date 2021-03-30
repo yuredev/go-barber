@@ -5,16 +5,16 @@ import Input from '../components/Input';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signInBackgroundImg from '../assets/sign-in-background.png';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 
 function SignIn() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function handleSubmit(event: FormEvent) {
+  const handleSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
-  }
+  }, []);
 
   return (
     <Container>

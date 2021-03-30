@@ -5,16 +5,16 @@ import Input from '../components/Input';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signUpBackground from '../assets/sign-up-background.png';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 
 function SignUp() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function handleSubmit(event: FormEvent) {
+  const handleSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
-  }
+  }, []);
 
   return (
     <Container>
@@ -46,7 +46,7 @@ function SignUp() {
         </form>
         <a href="forgot">
           <FiArrowLeft />
-          Back to log on
+          Back to logon
         </a>
       </Content>
     </Container>

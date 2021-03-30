@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const backgroundColor = '#312E38';
+export const orange = '#ff9000';
 
 export default createGlobalStyle`
   * {
