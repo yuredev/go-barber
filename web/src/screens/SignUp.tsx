@@ -5,42 +5,71 @@ import Input from '../components/Input';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signUpBackground from '../assets/sign-up-background.png';
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useRef, useState } from 'react';
+import * as Yup from 'yup';
 
 function SignUp() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = useCallback((event: FormEvent) => {
-    event.preventDefault();
+  const validateForm = useCallback(async () => {
+    const schema = Yup.object().shape({
+      name: Yup.string().required('Name is required'),
+      email: Yup.string()
+        .email('Invalid email format')
+        .required('E-mail is required'),
+      password: Yup.string().min(6, 'A minimum of 6 characters is required'),
+    });
+    const inputs = formRef.current?.querySelectorAll('input');
+
+    let data: any = {
+      name: '',
+      email: '',
+      password: '',
+    }
+
+    inputs?.forEach(input => {
+      data[input.name] = input.value;
+    });
+
+    await schema.validate(data, {
+      // retorna todos os erros de uma vez ao inves de retornar o primeiro erro
+      abortEarly: false,
+    });
   }, []);
+
+  const handleSubmit = useCallback(async (event: FormEvent) => {
+      event.preventDefault();
+      try {
+        await validateForm();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [validateForm]
+  );
 
   return (
     <Container>
       <Background />
       <Content>
         <img src={logoImg} alt="GoBarber" />
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} ref={formRef}>
           <h1>Sign up to GoBarber</h1>
           <Input
             icon={FiUser}
             name="name"
             placeholder="Name"
-            onChange={({ target }) => setName(target.value)}
           />
           <Input
             icon={FiMail}
             name="email"
             placeholder="Email"
-            onChange={({ target }) => setEmail(target.value)}
           />
           <Input
             icon={FiLock}
             name="password"
             placeholder="Password"
             type="Password"
-            onChange={({ target }) => setPassword(target.value)}
           />
           <Button type="submit">Sign Up</Button>
         </form>
