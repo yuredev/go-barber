@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 import { IconType } from 'react-icons';
 import styled, { css } from 'styled-components';
 import { orange } from '../styles/global';
+import { FiAlertCircle } from 'react-icons/fi';
+import Tooltip from './Tooltip';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -15,7 +17,7 @@ export default function Input({ icon: Icon, error, ...rest }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
-  // o useCallback deve sempre ser utilizado para a função não precisar ser 
+  // o useCallback deve sempre ser utilizado para a função não precisar ser
   // redeclarada toda vez que o estado for atualizado
   // o segundo parametro do useCallback são
   // valores onde a função vai ser redeclarada caso
@@ -28,25 +30,30 @@ export default function Input({ icon: Icon, error, ...rest }: InputProps) {
   }, []);
 
   const handleInputFocus = useCallback(() => {
-    setIsFocused(true)
+    setIsFocused(true);
   }, []);
 
   return (
-    <Container isFocused={isFocused} isFilled={isFilled}>
+    <Container hasError={!!error} isFocused={isFocused} isFilled={isFilled}>
       {Icon && <Icon size={20} />}
-      <input 
-        {...rest} 
+      <input
+        {...rest}
         onFocus={handleInputFocus}
         // quando desfoca
         onBlur={handleInputBlur}
       />
-      { error && <span>{error}</span> }
+      {error && (
+				<Error title={error}>
+					<FiAlertCircle  color='#c53030' size={20} />
+				</Error>
+			)}
     </Container>
   );
 }
 
 interface ContainerProps {
   isFocused: boolean;
+  hasError: boolean;
   isFilled: boolean;
 }
 
@@ -69,26 +76,54 @@ const Container = styled.div<ContainerProps>`
     margin-right: 16px;
   }
 
+	${({ hasError }) =>
+    hasError &&
+    css`
+      border-color: #c53030;
+    `}	
+
   /* só renderiza o component caso a prop isFocused seja true */
-  ${props => props.isFocused && css`
-    color: ${orange};
-    border-color: ${orange};
-  `}
-
-  ${({isFilled, isFocused}) => (isFilled || isFocused) && css`
-    svg {
+  ${(props) =>
+    props.isFocused &&
+    css`
       color: ${orange};
-    }
-  `}
+      border-color: ${orange};
+    `}
 
-  input {
+  ${({ isFilled, isFocused }) =>
+    (isFilled || isFocused) &&
+    css`
+      svg {
+        color: ${orange};
+      }
+    `}
+	
+	input {
     color: #f4ede8;
     flex: 1;
     border: 0;
     background: transparent;
-    
+
     ::placeholder {
       color: #666360;
     }
   }
+`;
+
+// estilizando componentes que foram importados...
+const Error = styled(Tooltip)`
+	height: 20px;
+	margin-left: 16px;
+	svg {
+		margin: 0;
+	}
+
+	span {
+		background: #c53030;
+		color: #fff;
+		&::before {
+			border-color: #c53030 transparent;
+		}
+	}
+
 `;

@@ -1,3 +1,4 @@
+import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 
 import GlobalStyle from './styles/global';
@@ -5,7 +6,7 @@ import GlobalStyle from './styles/global';
 function App() {
   return (
     <>
-      <SignUp />
+      <SignIn />
       <GlobalStyle />
     </>
   );
