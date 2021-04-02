@@ -7,9 +7,12 @@ import { shade } from 'polished';
 import signUpBackground from '../assets/sign-up-background.png';
 import { FormEvent, useCallback, useRef, useState } from 'react';
 import * as Yup from 'yup';
+import Errors from '../interfaces';
+import getValidationErrors from '../utils/getValidationErrors';
 
 function SignUp() {
   const formRef = useRef<HTMLFormElement>(null);
+  const [errors, setErrors] = useState<Errors>() ;
 
   const validateForm = useCallback(async () => {
     const schema = Yup.object().shape({
@@ -17,17 +20,13 @@ function SignUp() {
       email: Yup.string()
         .email('Invalid email format')
         .required('E-mail is required'),
-      password: Yup.string().min(6, 'A minimum of 6 characters is required'),
+      password: Yup.string().min(6, 'Minimum of 6 characters'),
     });
     const inputs = formRef.current?.querySelectorAll('input');
 
-    let data: any = {
-      name: '',
-      email: '',
-      password: '',
-    }
+    const data: Errors = {};
 
-    inputs?.forEach(input => {
+    inputs?.forEach((input) => {
       data[input.name] = input.value;
     });
 
@@ -37,12 +36,14 @@ function SignUp() {
     });
   }, []);
 
-  const handleSubmit = useCallback(async (event: FormEvent) => {
+  const handleSubmit = useCallback(
+    async (event: FormEvent) => {
       event.preventDefault();
       try {
         await validateForm();
       } catch (error) {
-        console.error(error);
+        const validationErrors = getValidationErrors(error);
+        setErrors(validationErrors);
       }
     },
     [validateForm]
@@ -55,17 +56,10 @@ function SignUp() {
         <img src={logoImg} alt="GoBarber" />
         <form onSubmit={handleSubmit} ref={formRef}>
           <h1>Sign up to GoBarber</h1>
+          <Input icon={FiUser} name="name" placeholder="Name" error={errors?.name} />
+          <Input icon={FiMail} name="email" placeholder="Email" error={errors?.email}/>
           <Input
-            icon={FiUser}
-            name="name"
-            placeholder="Name"
-          />
-          <Input
-            icon={FiMail}
-            name="email"
-            placeholder="Email"
-          />
-          <Input
+            error={errors?.password}
             icon={FiLock}
             name="password"
             placeholder="Password"

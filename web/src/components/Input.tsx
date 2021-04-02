@@ -6,11 +6,12 @@ import { orange } from '../styles/global';
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   icon: IconType;
+  error?: string;
 }
 
 // o react não permite usar icon no minisculo ja que ele é um componente
 // assim o icon: Icon converte
-export default function Input({ icon: Icon, ...rest }: InputProps) {
+export default function Input({ icon: Icon, error, ...rest }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
@@ -39,6 +40,7 @@ export default function Input({ icon: Icon, ...rest }: InputProps) {
         // quando desfoca
         onBlur={handleInputBlur}
       />
+      { error && <span>{error}</span> }
     </Container>
   );
 }
@@ -48,7 +50,7 @@ interface ContainerProps {
   isFilled: boolean;
 }
 
-export const Container = styled.div<ContainerProps>`
+const Container = styled.div<ContainerProps>`
   background: #232129;
   border-radius: 10px;
   border: 2px solid #232129;
