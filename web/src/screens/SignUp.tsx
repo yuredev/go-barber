@@ -12,9 +12,10 @@ import getValidationErrors from '../utils/getValidationErrors';
 
 function SignUp() {
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<Errors>() ;
+  const [errors, setErrors] = useState<Errors | null>(null);
 
   const validateForm = useCallback(async () => {
+    setErrors(null);
     const schema = Yup.object().shape({
       name: Yup.string().required('Name is required'),
       email: Yup.string()
@@ -39,7 +40,7 @@ function SignUp() {
   const handleSubmit = useCallback(
     async (event: FormEvent) => {
       event.preventDefault();
-      try {
+      try {        
         await validateForm();
       } catch (error) {
         const validationErrors = getValidationErrors(error);
@@ -56,8 +57,18 @@ function SignUp() {
         <img src={logoImg} alt="GoBarber" />
         <form onSubmit={handleSubmit} ref={formRef}>
           <h1>Sign up to GoBarber</h1>
-          <Input icon={FiUser} name="name" placeholder="Name" error={errors?.name} />
-          <Input icon={FiMail} name="email" placeholder="Email" error={errors?.email}/>
+          <Input
+            icon={FiUser}
+            name="name"
+            placeholder="Name"
+            error={errors?.name}
+          />
+          <Input
+            icon={FiMail}
+            name="email"
+            placeholder="Email"
+            error={errors?.email}
+          />
           <Input
             error={errors?.password}
             icon={FiLock}

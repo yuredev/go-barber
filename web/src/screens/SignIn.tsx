@@ -5,35 +5,72 @@ import Input from '../components/Input';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signInBackgroundImg from '../assets/sign-in-background.png';
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import getValidationErrors from '../utils/getValidationErrors';
+import * as Yup from 'yup';
+import Errors from '../interfaces';
 
 function SignIn() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
+  const [errors, setErrors] = useState<Errors | null>(null) ;
 
-  const handleSubmit = useCallback((event: FormEvent) => {
-    event.preventDefault();
+  useEffect(() => {
+    console.log(errors);
+  });
+
+  const validateForm = useCallback(async () => {
+    setErrors(null);
+    const schema = Yup.object().shape({
+      email: Yup.string()
+        .email('Invalid email format')
+        .required('E-mail is required'),
+      password: Yup.string().required('Password is required'),
+    });
+    const inputs = formRef.current?.querySelectorAll('input');
+
+    const data: Errors = {};
+
+    inputs?.forEach((input) => {
+      data[input.name] = input.value;
+    });
+
+    await schema.validate(data, {
+      // retorna todos os erros de uma vez ao inves de retornar o primeiro erro
+      abortEarly: false,
+    });
   }, []);
+
+  const handleSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault();
+      try {
+        await validateForm();
+      } catch (error) {
+        const validationErrors = getValidationErrors(error);
+        setErrors(validationErrors);
+      }
+    },
+    [validateForm]
+  );
 
   return (
     <Container>
       <Content>
         <img src={logoImg} alt="GoBarber" />
-        <form>
+        <form onSubmit={handleSubmit} ref={formRef}>
           <h1>Log in to your account</h1>
           <Input
             icon={FiMail}
             name="email"
             placeholder="Email"
-            onChange={({ target }) => setEmail(target.value)}
+            error={errors?.email}
           />
           <Input
             icon={FiLock}
             name="password"
             placeholder="Password"
             type="Password"
-            onChange={({ target }) => setPassword(target.value)}
+            error={errors?.password}
           />
           <Button type="submit">Sign In</Button>
           <a href="forgot">Forgot Password?</a>
