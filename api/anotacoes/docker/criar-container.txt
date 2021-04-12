@@ -1,0 +1,4 @@
+
+
+        (--name nome do container)     (-e variavel de ambiente)    (-p porta)     (-d nome da imagem)
+docker run --name gostack_postgres -e POSTGRES_PASSWORD=postgres -p 5434:5432 -d postgres

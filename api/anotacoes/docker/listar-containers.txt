@@ -1,0 +1,5 @@
+lista somente os em execução
+docker ps
+
+// lista todos
+docker ps -a

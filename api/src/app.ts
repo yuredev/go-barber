@@ -2,6 +2,8 @@ import express from "express";
 import { requestLogger } from "./middlewares/requestLogger";
 import routes from "./routes/routes";
 
+import './database';
+
 const PORT = 3001;
 const app = express();
 app.use(express.json());

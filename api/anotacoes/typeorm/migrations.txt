@@ -1,0 +1,24 @@
+observação: para usar com typescript devemos executar um bin específico do typeorm
+basta colocarmos no package.json o seguinte script:
+
+  "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+
+agora podemos rodar o typeorm usando o yarn que esse bin ja vai ser pego
+
+
+** criar migration
+
+                              (-n nome da migration)
+yarn typeorm migration:create -n create-appointments
+
+** rodar migration
+
+yarn typeorm migration:run
+
+** voltar migration
+
+yarn typeorm migration:revert
+
+** ver status das migrations
+
+yarn typeorm migration:show
