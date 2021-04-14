@@ -1,0 +1,13 @@
+instalar reflect-metadata se não o typeorm nao funfa
+
+atenção
+
+ao usar: yarn add reflect-matadata
+
+dá errado
+
+portanto precisamos colocar esta versão específica no package.json
+
+    "reflect-metadata": "^0.1.3",
+
+depois só dar um yarn ou npm install na pasta que é sucesso
