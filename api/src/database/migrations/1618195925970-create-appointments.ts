@@ -12,6 +12,9 @@ export default class createAppointments1618195925970
             type: 'varchar',
             isPrimary: true,
             generationStrategy: 'uuid',
+            // função do postgres para gerar uuid
+            // é necessário usar se não irá dar erro
+            default: 'uuid_generate_v4()'
           },
           {
             name: 'provider',

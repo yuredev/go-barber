@@ -1,6 +1,6 @@
-import { startOfHour } from "date-fns";
-import Appointment from "../models/Appointment";
-import AppointmentRepository from "../repositories/AppointmentRepository";
+import { startOfHour } from 'date-fns';
+import Appointment from '../models/Appointment';
+import AppointmentRepository from '../repositories/AppointmentRepository';
 import { getCustomRepository } from 'typeorm';
 
 interface RequestDTO {
@@ -16,16 +16,16 @@ class CreateAppointmentsService {
     const appointmentDate = startOfHour(date);
 
     const thereAreAppointmentsInSameDate =
-      repository.findByDate(appointmentDate) !== null;
+      (await repository.findByDate(appointmentDate)) !== null;
 
     if (thereAreAppointmentsInSameDate) {
-      throw Error("This appointment is already booked");
+      throw Error('This appointment is already booked');
     }
 
     // o create apenas cria a instancia mas não salva no banco de dados
     const appointment = repository.create({
       provider,
-      date: appointmentDate
+      date: appointmentDate,
     });
 
     await repository.save(appointment);

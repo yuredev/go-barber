@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express from "express";
 import { requestLogger } from "./middlewares/requestLogger";
 import routes from "./routes/routes";
