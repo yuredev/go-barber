@@ -29,4 +29,4 @@ appointmentsRouter.post('/', async (req, res) => {
   }
 });
 
-export { appointmentsRouter };
+export default appointmentsRouter;

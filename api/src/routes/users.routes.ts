@@ -21,4 +21,4 @@ usersRouter.post('/', async (req, res) => {
   }
 });
 
-export { usersRouter };
+export default usersRouter;

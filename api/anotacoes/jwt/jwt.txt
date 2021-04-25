@@ -1,0 +1,31 @@
+JWT é um esquema de autenticação para APIS REST, em uma aplicação que retorna html isso seria por sessão
+
+
+o token jwt é um hash bem grande e tem 3 partes principais
+
+
+** Headers
+  informações sobre o token e sobre o algorimo de criptografia, serve para o frontend saber
+  o saber como descriptografar o conteúdo
+
+** Payload
+  Informações adicionais anexadas que não necessitam de segurança como ID ou nome do usuário por exemplo
+  (obs: senhas não devem ser mandadas aqui) (obs: emails podem mas não é tão recomendado)
+
+** Signature
+  Assinatura que garante com que o token na parte de payload não seja modificado por outro usuário
+  como por exemplo: se tentarem modificar o payload e mudar o id do usuário isso não dará certo
+  pois é checada a assinatura
+
+
+exemplo de token:
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTkzODM3NTIsImV4cCI6MTYxOTQ
+3MDE1Miwic3ViIjoiNWMxNmRjMjgtMTZiZS00ODY5LThiZWEtZTk1
+NGE1OGI3ODk0In0.iL9VIPnuoDCTEnMFM6MIPsi0aNh2rgPlVGaW1SIqJnk
+
+as 3 partes do token são separadas pelo '.'
+
+é possível ler um token no site: https://jwt.io/
+
+neste site ele decodifica e mostra os headers, payload e signature
