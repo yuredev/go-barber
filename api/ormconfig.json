@@ -4,6 +4,7 @@
   "port": 5434,
   "username": "postgres",
   "password": "postgres",
+  "synchronize": true,
   "database": "gostack_gobarber",
   "entities": [
     "./src/models/*.ts"
