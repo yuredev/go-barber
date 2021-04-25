@@ -1,11 +1,9 @@
 import { Router } from "express";
 import { appointmentsRouter } from "./appointments.routes";
+import { usersRouter } from './user.routes';
 
 const router = Router();
 router.use("/appointments", appointmentsRouter);
-
-router.get("/", () => {
-  console.log("ajdsiajda");
-});
+router.use("/users", usersRouter);
 
 export default router;
