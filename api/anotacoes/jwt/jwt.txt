@@ -29,3 +29,24 @@ as 3 partes do token são separadas pelo '.'
 é possível ler um token no site: https://jwt.io/
 
 neste site ele decodifica e mostra os headers, payload e signature
+
+neste site podemos ver que o payload de um token contem:
+
+iat: quando o token foi gerado
+exp: quando que o token expira
+sub: o que identifica o usuário
+
+
+podemos apenas permitir determinadas requisições que possuam determinado token JWT
+
+podmos colocar o token jwt gerado pela API no insomnia na parte de headers da requisição
+
+colocamos um header Authorization
+e no seu conteúdo colocamos:
+
+(obs: bearer é só um padrão, funciona sem ele, mas é o que a JWT recomenda fazer)
+Bearer <TOKEN_JWT>
+
+
+tbm é possível passar o token com o bearer já definido. basta ir em Auth na requisição e selecionar Bearer token
+assim o bearer vai por padrão e só precisamos escrever o token no insomnia

@@ -2,6 +2,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 import User from '../models/User';
+import authConfig from '../config/auth';
 
 interface Auth {
   email: string;
@@ -35,15 +36,14 @@ class AuthUserService {
     }
 
     // gerar JWT
-    // primeiro parametro: permissões e os dados do payload
-    // segundo parametro: hash única que deve ser conhecida apenas pelo backend
-    // hash gerada no md5 online
+    // primeiro parametro: permissões do usuário e os dados do payload (fica criptografado, mas não é seguro)
+    // segundo parametro: hash única que deve ser conhecida apenas pelo backend, podemos por exemplo usar o md5 online que é um site que gera hashs
     // terceiro parametro: configuraçẽos do token
-    const token = sign({}, '0357457da27598df2f1796e0bfeb0920', {
+    const token = sign({}, authConfig.jwt.secret, {
       // subject tem de ser o que identifica o usuário
       subject: user.id,
       // tempo de expiração do token, ou seja o tempo que o user ficará logado
-      expiresIn: '1d',
+      expiresIn: authConfig.jwt.expiresIn,
     });
 
     return {
