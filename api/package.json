@@ -9,11 +9,13 @@
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@types/multer": "^1.4.5",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "date-fns": "^2.19.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.3",
     "typeorm": "^0.2.32",
