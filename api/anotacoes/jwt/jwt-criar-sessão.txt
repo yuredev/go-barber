@@ -1,0 +1,17 @@
+*** Logar ***
+
+manda requisição
+
+olha se tem usuário com o mesmo email
+
+comparar senha normal mandada por rest com a criptografada do banco usando o
+compare do bcryptjs
+
+usar o sign do módulo jsonwebtoken, passando uma hash única que é conhecida pela API
+usamos no terceiro parametro as configurações para o payload como iat, exp e sub
+colocamos o usuário para o subject
+e o expiresIn (exp) colocamos o tempo ex: "1d"
+após isso teremos o token
+
+com o token gerado, retornamos para o client da requisição o usuário (exceto password) e o token jwt
+

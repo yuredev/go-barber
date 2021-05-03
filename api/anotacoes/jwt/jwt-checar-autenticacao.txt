@@ -1,0 +1,25 @@
+em um middleware...
+
+pegamos o Authorization token que vem no header
+
+verificamos se o token é valido com a função
+verify do jsonwebtoken
+isto retorna o objeto do payload
+assim neste objeto podemos obter o iat, sub e exp
+
+caso o objeto de payload não seja retornado
+o verify lança uma exception
+o que significa que o usuário não está autenticado
+podemos por o verify dentro de um try catch por exemplo
+e lançarmos nossa própria excessão customizada
+
+no final da requisição se tiver autenticado
+pegamos o subject de dentro do objeto do payload
+que é o usuário
+
+e salvamos ele na request do Express
+ou mesmo no response.locals
+
+assim ele poderá ser acessado pelas rotas
+posteriores
+
