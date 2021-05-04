@@ -4,6 +4,7 @@ import { join } from 'path';
 import uploadConfig from '../config/upload';
 // traz as coisas do fs porem tudo com formato de promise
 import { promises as fs} from 'fs';
+import AppError from "../errors/AppError";
 
 interface Request {
   userId: string;
@@ -18,7 +19,7 @@ export default class UpdateUserAvatarService {
     const userFound = await userRepo.findOne(userId);
 
     if (!userFound) {
-      throw new Error('Only authenticated users can change the avatar');
+      throw new AppError('Only authenticated users can change the avatar', 401);
     }
 
     if (userFound.avatar) {

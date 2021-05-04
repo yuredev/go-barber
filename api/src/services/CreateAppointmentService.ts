@@ -3,6 +3,7 @@ import Appointment from '../models/Appointment';
 import AppointmentRepository from '../repositories/AppointmentRepository';
 import { getCustomRepository, getRepository } from 'typeorm';
 import User from '../models/User';
+import AppError from '../errors/AppError';
 
 interface RequestDTO {
   providerId: string;
@@ -23,13 +24,13 @@ class CreateAppointmentsService {
       (await appointmentRepo.findByDate(appointmentDate)) !== null;
 
     if (thereAreAppointmentsInSameDate) {
-      throw Error('This appointment is already booked');
+      throw new AppError('This appointment is already booked');
     }
 
     const providerFound = await userRepo.findOne(providerId);
 
     if (!providerFound) {
-      throw new Error('No provider found for this providerId');
+      throw new AppError('No provider found for this providerId');
     }
 
     // o create apenas cria a instancia mas não salva no banco de dados

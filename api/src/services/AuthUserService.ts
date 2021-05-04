@@ -3,6 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 import User from '../models/User';
 import authConfig from '../config/auth';
+import AppError from '../errors/AppError';
 
 interface Auth {
   email: string;
@@ -24,7 +25,7 @@ class AuthUserService {
     });
 
     if (!user) {
-      throw new Error('Incorrect email/password combination.');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     // password é a senha não criptografada
@@ -32,7 +33,7 @@ class AuthUserService {
     const didThePasswordsMatch = await compare(password, user.password);
 
     if (!didThePasswordsMatch) {
-      throw new Error('Incorrect email/password combination.');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     // gerar JWT
