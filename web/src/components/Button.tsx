@@ -8,8 +8,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export default function Button({ children, ...rest }: ButtonProps) {
   return (
-    <Container type="button" {...rest}>
-      <button>{children}</button>
+    <Container {...rest}>
+      <div>{children}</div>
     </Container>
   );
 }
@@ -27,10 +27,11 @@ const Container = styled.button`
   transition: background-color 0.2s;
   display: flex;
 
-  button {
+  div {
     flex: 1;
     border: 0;
     background: transparent;
+    align-self: center;
   }
 
   &:hover {

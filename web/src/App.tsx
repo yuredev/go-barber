@@ -1,12 +1,14 @@
 import SignIn from './screens/SignIn';
-import SignUp from './screens/SignUp';
-
 import GlobalStyle from './styles/global';
+
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <>
-      <SignIn />
+      <AuthProvider>
+        <SignIn />
+      </AuthProvider>
       <GlobalStyle />
     </>
   );

@@ -6,9 +6,11 @@ import httpRoutes from './routes';
 import uploadConfig from './config/upload';
 import './database';
 import globalExceptionHandler from './middlewares/globalExceptionHandler';
+import cors from 'cors';
 
 const PORT = 3001;
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
 

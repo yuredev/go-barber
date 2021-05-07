@@ -5,18 +5,17 @@ import Input from '../components/Input';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signInBackgroundImg from '../assets/sign-in-background.png';
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FormEvent, useCallback, useContext, useRef, useState } from 'react';
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
-import Errors from '../interfaces';
+import { Errors, SignInCredentials } from '../interfaces';
+import  { AuthContext } from '../context/AuthContext';
+import RequestError from '../errors/RequestError';
 
 function SignIn() {
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors | null>(null) ;
-
-  useEffect(() => {
-    console.log(errors);
-  });
+  const { signIn, user } = useContext(AuthContext);
 
   const validateForm = useCallback(async () => {
     setErrors(null);
@@ -30,7 +29,7 @@ function SignIn() {
 
     const data: Errors = {};
 
-    inputs?.forEach((input) => {
+    inputs?.forEach(input => {
       data[input.name] = input.value;
     });
 
@@ -38,19 +37,27 @@ function SignIn() {
       // retorna todos os erros de uma vez ao inves de retornar o primeiro erro
       abortEarly: false,
     });
+
+    const credentials = { ...data } as any as SignInCredentials;
+    return credentials;
   }, []);
 
   const handleSubmit = useCallback(
     async (event: FormEvent) => {
       event.preventDefault();
       try {
-        await validateForm();
+        const { email, password } = await validateForm();
+        await signIn({email, password});
       } catch (error) {
+        if (error instanceof RequestError) {
+          alert(error.message);
+          return;
+        }
         const validationErrors = getValidationErrors(error);
         setErrors(validationErrors);
       }
     },
-    [validateForm]
+    [validateForm, signIn]
   );
 
   return (

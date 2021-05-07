@@ -7,7 +7,7 @@ import { shade } from 'polished';
 import signUpBackground from '../assets/sign-up-background.png';
 import { FormEvent, useCallback, useRef, useState } from 'react';
 import * as Yup from 'yup';
-import Errors from '../interfaces';
+import { Errors } from '../interfaces';
 import getValidationErrors from '../utils/getValidationErrors';
 
 function SignUp() {
