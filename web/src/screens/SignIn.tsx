@@ -5,17 +5,17 @@ import Input from '../components/Input';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signInBackgroundImg from '../assets/sign-in-background.png';
-import { FormEvent, useCallback, useContext, useRef, useState } from 'react';
+import { FormEvent, useCallback, useRef, useState } from 'react';
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
 import { Errors, SignInCredentials } from '../interfaces';
-import  { AuthContext } from '../context/AuthContext';
+import  { useAuth } from '../hooks/AuthContext';
 import RequestError from '../errors/RequestError';
 
 function SignIn() {
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors | null>(null) ;
-  const { signIn, user } = useContext(AuthContext);
+  const { signIn } = useAuth();
 
   const validateForm = useCallback(async () => {
     setErrors(null);

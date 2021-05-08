@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react';
+import React, { createContext, useCallback, useState, useContext } from 'react';
 import RequestError from '../errors/RequestError';
 import { SignInCredentials } from '../interfaces';
 import api from '../services/api';
@@ -15,9 +15,18 @@ interface AuthData {
 interface AuthContextData {
   user: object;
   signIn(credentials: SignInCredentials): Promise<void>;
+  signOut(): void;
 }
 
-export const AuthContext = createContext({} as AuthContextData);
+const AuthContext = createContext({} as AuthContextData);
+
+export function useAuth(): AuthContextData {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
 
 export const AuthProvider: React.FC = ({ children }) => {
 
@@ -34,6 +43,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthData;
   });
 
+
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     try {
       const { data } = await api.post('/sessions', {
@@ -43,7 +53,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
       localStorage.setItem('@GoBarber:token', data.token);
       // o user é um objeto, logo salvamos ele na forma de json      
-      localStorage.setItem('@GoBarber:token', JSON.stringify(data.user));
+      localStorage.setItem('@GoBarber:user', JSON.stringify(data.user));
       
       // dispara a callback do useState, como se fosse um setter de um computed no Vue
       setAuthData({ token: data.token, user: data.user});
@@ -53,8 +63,16 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
   }, []);
 
+
+  const signOut = useCallback(() => {
+    localStorage.removeItem('@GoBarber:token');
+    localStorage.removeItem('@GoBarber:token');
+    setAuthData({} as AuthData);
+  }, []);
+
+
   return (
-    <AuthContext.Provider value={{ user : authData.user, signIn }}>
+    <AuthContext.Provider value={{ user: authData.user, signIn, signOut }}>
       {children}      
     </AuthContext.Provider>
   );

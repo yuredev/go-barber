@@ -1,7 +1,7 @@
 import SignIn from './screens/SignIn';
 import GlobalStyle from './styles/global';
 
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './hooks/AuthContext';
 
 function App() {
   return (
