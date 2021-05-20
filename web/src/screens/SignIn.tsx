@@ -9,13 +9,15 @@ import { FormEvent, useCallback, useRef, useState } from 'react';
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
 import { Errors, SignInCredentials } from '../interfaces';
-import  { useAuth } from '../hooks/AuthContext';
+import  { useAuth } from '../hooks/auth';
 import RequestError from '../errors/RequestError';
+import { useToast } from '../hooks/toast';
 
 function SignIn() {
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors | null>(null) ;
   const { signIn } = useAuth();
+  const { addToast } = useToast();
 
   const validateForm = useCallback(async () => {
     setErrors(null);
@@ -49,15 +51,26 @@ function SignIn() {
         const { email, password } = await validateForm();
         await signIn({email, password});
       } catch (error) {
-        if (error instanceof RequestError) {
-          alert(error.message);
+        if (error instanceof Yup.ValidationError) {
+          const validationErrors = getValidationErrors(error);
+          setErrors(validationErrors);
+          return;
+        } else if (error instanceof RequestError) {
+          addToast({
+            type: 'error',
+            title: 'Authentication error',
+            description: 'An error has occurred during login, check the credentials.'
+          });
           return;
         }
-        const validationErrors = getValidationErrors(error);
-        setErrors(validationErrors);
+        addToast({
+          type: 'error',
+          title: 'Unexpected error',
+          description: 'Sorry, an error has occurred during login.'
+        });
       }
     },
-    [validateForm, signIn]
+    [validateForm, signIn, addToast]
   );
 
   return (

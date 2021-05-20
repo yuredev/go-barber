@@ -30,8 +30,8 @@ export function useAuth(): AuthContextData {
 
 export const AuthProvider: React.FC = ({ children }) => {
 
-  // passar uma callback no useState faz a callback executar toda vez que
-  // o setAuthData for executado, como se fosse um setter de um computed no Vue
+  // podemos passar uma callback para o useState, assim a callback é executada 
+  // e o retorno dela é o que vai para o estado
   const [authData, setAuthData] = useState<AuthData>(() => {
     const token = localStorage.getItem('@GoBarber:token');
     const user = localStorage.getItem('@GoBarber:token');
