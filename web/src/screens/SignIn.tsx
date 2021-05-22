@@ -2,20 +2,21 @@ import logoImg from '../assets/logo.svg';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 import signInBackgroundImg from '../assets/sign-in-background.png';
-import { FormEvent, useCallback, useRef, useState } from 'react';
+import React, { FormEvent, useCallback, useRef, useState } from 'react';
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
 import { Errors, SignInCredentials } from '../interfaces';
-import  { useAuth } from '../hooks/auth';
+import { useAuth } from '../hooks/auth';
 import RequestError from '../errors/RequestError';
 import { useToast } from '../hooks/toast';
+import { Link } from 'react-router-dom';
 
-function SignIn() {
+const SignIn: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<Errors | null>(null) ;
+  const [errors, setErrors] = useState<Errors | null>(null);
   const { signIn } = useAuth();
   const { addToast } = useToast();
 
@@ -31,7 +32,7 @@ function SignIn() {
 
     const data: Errors = {};
 
-    inputs?.forEach(input => {
+    inputs?.forEach((input) => {
       data[input.name] = input.value;
     });
 
@@ -49,7 +50,7 @@ function SignIn() {
       event.preventDefault();
       try {
         const { email, password } = await validateForm();
-        await signIn({email, password});
+        await signIn({ email, password });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const validationErrors = getValidationErrors(error);
@@ -59,14 +60,15 @@ function SignIn() {
           addToast({
             type: 'error',
             title: 'Authentication error',
-            description: 'An error has occurred during login, check the credentials.'
+            description:
+              'An error has occurred during login, check the credentials.',
           });
           return;
         }
         addToast({
           type: 'error',
           title: 'Unexpected error',
-          description: 'Sorry, an error has occurred during login.'
+          description: 'Sorry, an error has occurred during login.',
         });
       }
     },
@@ -76,34 +78,36 @@ function SignIn() {
   return (
     <Container>
       <Content>
-        <img src={logoImg} alt="GoBarber" />
-        <form onSubmit={handleSubmit} ref={formRef}>
-          <h1>Log in to your account</h1>
-          <Input
-            icon={FiMail}
-            name="email"
-            placeholder="Email"
-            error={errors?.email}
-          />
-          <Input
-            icon={FiLock}
-            name="password"
-            placeholder="Password"
-            type="Password"
-            error={errors?.password}
-          />
-          <Button type="submit">Sign In</Button>
-          <a href="forgot">Forgot Password?</a>
-        </form>
-        <a href="forgot">
-          <FiLogIn />
-          Create account
-        </a>
+        <AnimationContainer>
+          <img src={logoImg} alt="GoBarber" />
+          <form onSubmit={handleSubmit} ref={formRef}>
+            <h1>Log in to your account</h1>
+            <Input
+              icon={FiMail}
+              name="email"
+              placeholder="Email"
+              error={errors?.email}
+            />
+            <Input
+              icon={FiLock}
+              name="password"
+              placeholder="Password"
+              type="Password"
+              error={errors?.password}
+            />
+            <Button type="submit">Sign In</Button>
+            <Link to="forgot">Forgot Password?</Link>
+          </form>
+          <Link to="/signup">
+            <FiLogIn />
+            Create account
+          </Link>
+        </AnimationContainer>
       </Content>
       <Background />
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   height: 100vh;
@@ -112,16 +116,35 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   /*
     dev: "senhor place-content você alinha na verical ou na horizontal?" 
     place-content: "SIM"
   */
+  display: flex;
+  flex-direction: column;
   place-content: center;
   width: 100%;
   max-width: 700px;
+`;
+
+const appearFromLeftAnimation = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+const AnimationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  animation: ${appearFromLeftAnimation} 1s;
 
   form {
     margin: 80px 0;
@@ -144,6 +167,7 @@ const Content = styled.div`
       }
     }
   }
+
   /* somente <a> que tiver dentro de Content */
   > a {
     color: #ff9000;

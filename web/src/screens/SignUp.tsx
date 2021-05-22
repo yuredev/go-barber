@@ -2,15 +2,16 @@ import logoImg from '../assets/logo.svg';
 import { FiArrowLeft, FiLock, FiUser, FiMail } from 'react-icons/fi';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 import signUpBackground from '../assets/sign-up-background.png';
 import { FormEvent, useCallback, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Errors } from '../interfaces';
 import getValidationErrors from '../utils/getValidationErrors';
+import { Link } from 'react-router-dom';
 
-function SignUp() {
+const SignUp: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors | null>(null);
 
@@ -40,7 +41,7 @@ function SignUp() {
   const handleSubmit = useCallback(
     async (event: FormEvent) => {
       event.preventDefault();
-      try {        
+      try {
         await validateForm();
       } catch (error) {
         const validationErrors = getValidationErrors(error);
@@ -54,38 +55,40 @@ function SignUp() {
     <Container>
       <Background />
       <Content>
-        <img src={logoImg} alt="GoBarber" />
-        <form onSubmit={handleSubmit} ref={formRef}>
-          <h1>Sign up to GoBarber</h1>
-          <Input
-            icon={FiUser}
-            name="name"
-            placeholder="Name"
-            error={errors?.name}
-          />
-          <Input
-            icon={FiMail}
-            name="email"
-            placeholder="Email"
-            error={errors?.email}
-          />
-          <Input
-            error={errors?.password}
-            icon={FiLock}
-            name="password"
-            placeholder="Password"
-            type="Password"
-          />
-          <Button type="submit">Sign Up</Button>
-        </form>
-        <a href="forgot">
-          <FiArrowLeft />
-          Back to logon
-        </a>
+        <AnimationContainer>
+          <img src={logoImg} alt="GoBarber" />
+          <form onSubmit={handleSubmit} ref={formRef}>
+            <h1>Sign up to GoBarber</h1>
+            <Input
+              icon={FiUser}
+              name="name"
+              placeholder="Name"
+              error={errors?.name}
+            />
+            <Input
+              icon={FiMail}
+              name="email"
+              placeholder="Email"
+              error={errors?.email}
+            />
+            <Input
+              error={errors?.password}
+              icon={FiLock}
+              name="password"
+              placeholder="Password"
+              type="Password"
+            />
+            <Button type="submit">Sign Up</Button>
+          </form>
+          <Link to="/">
+            <FiArrowLeft />
+            Back to logon
+          </Link>
+        </AnimationContainer>
       </Content>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   height: 100vh;
@@ -94,16 +97,36 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   /*
     dev: "senhor place-content você alinha na verical ou na horizontal?" 
     place-content: "SIM"
   */
-  place-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   max-width: 700px;
+`;
+
+const appearFromRightAnimation = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+const AnimationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  animation: ${appearFromRightAnimation} 1s;
 
   form {
     margin: 80px 0;
@@ -126,16 +149,17 @@ const Content = styled.div`
       }
     }
   }
+
   /* somente <a> que tiver dentro de Content */
-  > a {
-    color: #f4ede8;
+  a {
+    color: #ff9000;
     display: block;
     margin-top: 24px;
     text-decoration: none;
     transition: color 0.2s;
 
     &:hover {
-      color: ${shade(0.2, '#f4ede8')};
+      color: ${shade(0.2, '#ff9000')};
     }
 
     display: flex;
