@@ -1,3 +1,4 @@
+import { animated } from '@react-spring/web';
 import React, { useEffect } from 'react';
 import { FiAlertCircle, FiXCircle, FiInfo, FiCheckCircle } from 'react-icons/fi';
 import styled, { css } from 'styled-components';
@@ -5,6 +6,7 @@ import { ToastMessage, useToast } from '../../hooks/toast';
 
 interface ToastProps {
   message: ToastMessage;
+  style: object;
 }
 
 const toastIcons = {
@@ -13,7 +15,7 @@ const toastIcons = {
   success: <FiCheckCircle size={24} />,
 }
 
-const Toast: React.FC<ToastProps> = ({ message }) => {
+const Toast: React.FC<ToastProps> = ({ message, style }) => {
   const { removeToast } = useToast();
 
   useEffect(() => {
@@ -25,7 +27,6 @@ const Toast: React.FC<ToastProps> = ({ message }) => {
     // é executada quando o componente morrer
     // como se fosse um onDestroy
     return () => {
-      console.log('Toast sumiu');
       clearTimeout(timer);
     }
   }, [message.id, removeToast]);
@@ -36,6 +37,7 @@ const Toast: React.FC<ToastProps> = ({ message }) => {
     <Container
       hasDescription={!!message.description}
       type={message.type}
+      style={style}
     >
       { toastIcons[message.type || 'info'] }
       <div>
@@ -69,7 +71,7 @@ const toastTypes = {
   `,
 }
 
-const Container = styled.div<ContainerProps>`
+const Container = styled(animated.div)<ContainerProps>`
   width: 360px;
   position: relative;
   padding: 16px 30px 16px 16px;
