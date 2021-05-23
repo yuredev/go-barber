@@ -1,4 +1,4 @@
-export interface Errors {
+export interface Data {
   [key: string]: string;
 };
 

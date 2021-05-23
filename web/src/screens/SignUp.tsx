@@ -7,13 +7,17 @@ import { shade } from 'polished';
 import signUpBackground from '../assets/sign-up-background.png';
 import { FormEvent, useCallback, useRef, useState } from 'react';
 import * as Yup from 'yup';
-import { Errors } from '../interfaces';
+import { Data } from '../interfaces';
 import getValidationErrors from '../utils/getValidationErrors';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import api from '../services/api';
+import { useToast } from '../hooks/toast';
 
 const SignUp: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<Errors | null>(null);
+  const [errors, setErrors] = useState<Data | null>(null);
+  const history = useHistory();
+  const { addToast } = useToast();
 
   const validateForm = useCallback(async () => {
     setErrors(null);
@@ -26,7 +30,7 @@ const SignUp: React.FC = () => {
     });
     const inputs = formRef.current?.querySelectorAll('input');
 
-    const data: Errors = {};
+    const data: Data = {};
 
     inputs?.forEach((input) => {
       data[input.name] = input.value;
@@ -36,19 +40,36 @@ const SignUp: React.FC = () => {
       // retorna todos os erros de uma vez ao inves de retornar o primeiro erro
       abortEarly: false,
     });
+
+    return data;
   }, []);
 
   const handleSubmit = useCallback(
     async (event: FormEvent) => {
       event.preventDefault();
       try {
-        await validateForm();
+        const data = await validateForm();
+
+        await api.post('/users', data);
+
+        addToast({
+          title: 'User created successfully',
+          type: 'success',
+        });
+        
+        history.push('/');
       } catch (error) {
-        const validationErrors = getValidationErrors(error);
-        setErrors(validationErrors);
+        if (error instanceof Yup.ValidationError) {
+          const validationErrors = getValidationErrors(error);
+          setErrors(validationErrors);
+        } else if (error.response?.status === 400) {
+          addToast({ title: error.response.data.message, type: 'error' });
+        } else {
+          addToast({ title: 'SignUp error', type: 'error', description: 'An error has occurred during SignUp, please try again' });
+        }
       }
     },
-    [validateForm]
+    [validateForm, addToast, history]
   );
 
   return (

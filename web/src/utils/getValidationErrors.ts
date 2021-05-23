@@ -1,8 +1,8 @@
 import { ValidationError } from 'yup';
-import { Errors } from '../interfaces';
+import { Data } from '../interfaces';
 
-export default function getValidationErrors(errors: ValidationError): Errors {
-  const validationErrors: Errors = {};
+export default function getValidationErrors(errors: ValidationError): Data {
+  const validationErrors: Data = {};
   errors.inner.forEach(e => {
     if (e.path) {
       validationErrors[e.path] = e.message;

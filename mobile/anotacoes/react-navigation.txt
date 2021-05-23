@@ -1,0 +1,15 @@
+podemos definir a navegação usando o módulo @react-navigation/native
+
+** Instalação **
+
+yarn add @react-navigation/native
+
+yarn add react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view 
+
+
+** É OBRIGATÓRIO COLOCAR ESTA IMPORTAÇÂO NO PRIMEIRO ARQUIVO DO APP (normalmente no App.tsx) **
+
+import 'react-native-gesture-handler';
+
+
+

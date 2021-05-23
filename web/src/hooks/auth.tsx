@@ -34,7 +34,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   // e o retorno dela é o que vai para o estado
   const [authData, setAuthData] = useState<AuthData>(() => {
     const token = localStorage.getItem('@GoBarber:token');
-    const user = localStorage.getItem('@GoBarber:token');
+    const user = localStorage.getItem('@GoBarber:user');
 
     if (token && user) {
       return { token, user: JSON.parse(user) }
@@ -55,7 +55,6 @@ export const AuthProvider: React.FC = ({ children }) => {
       // o user é um objeto, logo salvamos ele na forma de json      
       localStorage.setItem('@GoBarber:user', JSON.stringify(data.user));
       
-      // dispara a callback do useState, como se fosse um setter de um computed no Vue
       setAuthData({ token: data.token, user: data.user});
     } catch (error) {
       console.log(error);

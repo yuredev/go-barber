@@ -8,7 +8,7 @@ import signInBackgroundImg from '../assets/sign-in-background.png';
 import React, { FormEvent, useCallback, useRef, useState } from 'react';
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
-import { Errors, SignInCredentials } from '../interfaces';
+import { Data, SignInCredentials } from '../interfaces';
 import { useAuth } from '../hooks/auth';
 import RequestError from '../errors/RequestError';
 import { useToast } from '../hooks/toast';
@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 
 const SignIn: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<Errors | null>(null);
+  const [errors, setErrors] = useState<Data | null>(null);
   const { signIn } = useAuth();
   const { addToast } = useToast();
 
@@ -30,7 +30,7 @@ const SignIn: React.FC = () => {
     });
     const inputs = formRef.current?.querySelectorAll('input');
 
-    const data: Errors = {};
+    const data: Data = {};
 
     inputs?.forEach((input) => {
       data[input.name] = input.value;
