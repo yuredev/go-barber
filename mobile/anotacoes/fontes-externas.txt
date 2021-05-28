@@ -1,0 +1,16 @@
+para pegar uma fonte externa é muito simples
+
+basta baixar as fontes, colocar na raiz do projeto
+uma pasta e em um arquivo chamado react-native.config.js
+colocar os direcionamentos
+
+logo após isso precisamos linkar a fonte nova
+pra instalar na aplicação nativa Android e IOS
+
+para isso executamos
+$ yarn react-native link 
+
+podemos conferir se o link deu certo olhando se a pasta está no main 
+da aplicação android nas pastas do android
+
+e para o ios verificamos o arquivo info.plist
