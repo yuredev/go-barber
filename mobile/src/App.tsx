@@ -14,7 +14,7 @@ const App: React.FC = () => {
     // de forma pura no React, sem precisar de lib externa
     <NavigationContainer>
       {/* a status bar é a barra de cima da tela que aparece as notificações, nivel bateria etc. */}
-      <StatusBar barStyle="light-content" backgroundColor="#312e28" />
+      <StatusBar barStyle="light-content" backgroundColor="#2c2930" />
       <View style={{ backgroundColor: '#312E38', flex: 1 }} >
         <AuthRoutes />
       </View>

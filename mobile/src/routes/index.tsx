@@ -14,7 +14,7 @@ const AuthRoutes: React.FC = () => {
         headerShown: false,
         // aplicar estilo em cada uma das rotas
         cardStyle: {
-          backgroundColor: '#312e28',
+          backgroundColor: '#2c2930',
         },
       }}
     >

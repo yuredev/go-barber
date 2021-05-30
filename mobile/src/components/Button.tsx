@@ -16,6 +16,7 @@ const Button: React.FC<ButtonProps> = ({ children, ...rest }) => {
  
 const Container = styled(RectButton)`
   width: 100%;
+  margin-top: 8px;
   height: 60px;
   background: #FF9000;
   border-radius: 10px;
